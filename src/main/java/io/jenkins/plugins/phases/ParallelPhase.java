@@ -1,4 +1,4 @@
-package io.jenkins.plugins.sample;
+package io.jenkins.plugins.phases;
 
 import hudson.Extension;
 import hudson.FilePath;
@@ -33,7 +33,7 @@ public class ParallelPhase extends Builder implements SimpleBuildStep {
         taskListener.getLogger().println("Hello, " + name + "!");
     }
 
-    @Symbol("parallel")
+    @Symbol("parallelPhase")
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
 
