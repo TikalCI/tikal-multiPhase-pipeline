@@ -1,4 +1,4 @@
-package io.jenkins.plugins.phases;
+package io.jenkins.plugins.multiPhase;
 
 import hudson.Extension;
 import hudson.FilePath;
