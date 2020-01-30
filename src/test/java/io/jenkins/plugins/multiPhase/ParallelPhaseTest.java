@@ -26,19 +26,6 @@ public class ParallelPhaseTest {
     }
 
     @Test
-    public void testConfigRoundtripFrench() throws Exception {
-        FreeStyleProject project = jenkins.createFreeStyleProject();
-        ParallelPhase builder = new ParallelPhase(name);
-        builder.setUseFrench(true);
-        project.getBuildersList().add(builder);
-        project = jenkins.configRoundtrip(project);
-
-        ParallelPhase lhs = new ParallelPhase(name);
-        lhs.setUseFrench(true);
-        jenkins.assertEqualDataBoundBeans(lhs, project.getBuildersList().get(0));
-    }
-
-    @Test
     public void testBuild() throws Exception {
         FreeStyleProject project = jenkins.createFreeStyleProject();
         ParallelPhase builder = new ParallelPhase(name);
@@ -49,25 +36,13 @@ public class ParallelPhaseTest {
     }
 
     @Test
-    public void testBuildFrench() throws Exception {
-
-        FreeStyleProject project = jenkins.createFreeStyleProject();
-        ParallelPhase builder = new ParallelPhase(name);
-        builder.setUseFrench(true);
-        project.getBuildersList().add(builder);
-
-        FreeStyleBuild build = jenkins.buildAndAssertSuccess(project);
-        jenkins.assertLogContains("Bonjour, " + name, build);
-    }
-
-    @Test
     public void testScriptedPipeline() throws Exception {
         String agentLabel = "my-agent";
         jenkins.createOnlineSlave(Label.get(agentLabel));
         WorkflowJob job = jenkins.createProject(WorkflowJob.class, "test-scripted-pipeline");
         String pipelineScript
                 = "node {\n"
-                + "  greet '" + name + "'\n"
+                + "  parallelPhase '" + name + "'\n"
                 + "}";
         job.setDefinition(new CpsFlowDefinition(pipelineScript, true));
         WorkflowRun completedBuild = jenkins.assertBuildStatusSuccess(job.scheduleBuild2(0));
