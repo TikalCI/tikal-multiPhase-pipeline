@@ -2,9 +2,9 @@ package io.jenkins.plugins.multiPhase;
 
 import groovy.lang.Binding;
 import hudson.Extension;
+// import org.jenkinsci.plugins.workflow.util.StaplerReferer;
 import org.jenkinsci.plugins.workflow.cps.CpsScript;
 import org.jenkinsci.plugins.workflow.cps.GlobalVariable;
-
 
 @Extension public class ParallelPhase extends GlobalVariable {
 

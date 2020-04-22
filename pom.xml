@@ -21,9 +21,8 @@
           ~ stapler-plugin.version: The Stapler Maven plugin version required by the plugin.
      -->
     </properties>
-    <name>Multi-Phase</name>
+    <name>Tikal multi-phase</name>
     <description>Run Jenkins Pipelines in phases</description>
-    <!-- The default licence for Jenkins OSS Plugins is MIT. Substitute for the applicable one if needed. -->
     <licenses>
         <license>
             <name>MIT License</name>
@@ -36,7 +35,7 @@
                 <!-- Pick up common dependencies for 2.164.x: https://github.com/jenkinsci/bom#usage -->
                 <groupId>io.jenkins.tools.bom</groupId>
                 <artifactId>bom-2.164.x</artifactId>
-                <version>3</version>
+                <version>5</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -50,7 +49,6 @@
         <dependency>
             <groupId>org.jenkins-ci.plugins.workflow</groupId>
             <artifactId>workflow-cps</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jenkins-ci.plugins.workflow</groupId>
