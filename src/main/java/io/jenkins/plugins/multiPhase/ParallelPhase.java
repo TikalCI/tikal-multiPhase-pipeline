@@ -1,51 +1,28 @@
 package io.jenkins.plugins.multiPhase;
 
+import groovy.lang.Binding;
 import hudson.Extension;
-import hudson.FilePath;
-import hudson.Launcher;
-import hudson.model.AbstractProject;
-import hudson.model.Run;
-import hudson.model.TaskListener;
-import hudson.tasks.BuildStepDescriptor;
-import hudson.tasks.Builder;
-import jenkins.tasks.SimpleBuildStep;
-import org.jenkinsci.Symbol;
-import org.kohsuke.stapler.DataBoundConstructor;
+import org.jenkinsci.plugins.workflow.cps.CpsScript;
+import org.jenkinsci.plugins.workflow.cps.GlobalVariable;
 
-import javax.annotation.Nonnull;
-import java.io.IOException;
 
-public class ParallelPhase extends Builder implements SimpleBuildStep {
+@Extension public class ParallelPhase extends GlobalVariable {
 
-    private String name;
-
-    @DataBoundConstructor
-    public ParallelPhase(String name) {
-        this.name = name;
+    @Override public String getName() {
+        return "parallelPhase";
     }
 
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void perform(@Nonnull Run<?, ?> run, @Nonnull FilePath filePath, @Nonnull Launcher launcher, @Nonnull TaskListener taskListener) throws InterruptedException, IOException {
-        taskListener.getLogger().println("Hello, " + name + "!");
-    }
-
-    @Symbol("parallelPhase")
-    @Extension
-    public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
-
-        @Override
-        public boolean isApplicable(Class<? extends AbstractProject> aClass) {
-            return true;
+    @Override public Object getValue(CpsScript script) throws Exception {
+        Binding binding = script.getBinding();
+        Object parallelPhase;
+        if (binding.hasVariable(getName())) {
+            parallelPhase = binding.getVariable(getName());
+        } else {
+            // Note that if this were a method rather than a constructor, we would need to mark it @NonCPS lest it throw CpsCallableInvocation.
+            parallelPhase = script.getClass().getClassLoader().loadClass("io.jenkins.plugins.multiPhase.parallelPhase").getConstructor(CpsScript.class).newInstance(script);
+            binding.setVariable(getName(), parallelPhase);
         }
-
-        @Override
-        public String getDisplayName() {
-            return "parallelPhase";
-        }
-
+        return parallelPhase;
     }
+
 }
